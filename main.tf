@@ -1,8 +1,8 @@
 terraform {
   required_providers {
     aws = {
-      source  = "hashicorp/aws"
-      version = "~>3.0"
+      source = "hashicorp/aws"
+      version = "5.17.0"
     }
   }
 }
@@ -11,7 +11,7 @@ provider "aws" {
   region = var.region
   default_tags {
     tags = {
-      Owner       = "Globomantics"
+      Owner       = "Mahendran"
       Project     = var.project
       Environment = var.environment
     }
