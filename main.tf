@@ -18,17 +18,6 @@ provider "aws" {
   }
 }
 
-resource "aws_vpc" "diamond_dogs" {
-  cidr_block           = var.address_space
-  enable_dns_hostnames = true
-
-  tags = {
-    name        = "${var.prefix}-vpc-${var.region}"
-    environment = var.environment
-  }
-}
-
-
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
