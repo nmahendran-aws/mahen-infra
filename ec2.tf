@@ -5,7 +5,7 @@ module "ec2_instance" {
 
   instance_type          = "t2.micro"
   monitoring             = true
-  subnet_id              = element(module.vpc.public_subnets, 0)
+  subnet_id              = data.aws_subnets.public-subnet1.id
   tags = {
     Terraform   = "true"
     Environment = "dev"
