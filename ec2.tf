@@ -18,6 +18,7 @@ module "ec2_instance" {
   availability_zone      = "us-east-1a"
   for_each = toset(data.aws_subnets.public1.ids)
   subnet_id              = each.value
+  associate_public_ip_address = true
   tags = {
     Terraform   = "true"
     Environment = "dev"
