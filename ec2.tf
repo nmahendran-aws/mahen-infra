@@ -16,7 +16,8 @@ module "ec2_instance" {
   instance_type          = "t2.micro"
   monitoring             = true
   availability_zone      = "us-east-1a"
-  subnet_id              = data.aws_subnets.public1.id
+  for_each = toset(data.aws_subnets.public1.ids)
+  subnet_id              = each.value
   tags = {
     Terraform   = "true"
     Environment = "dev"
