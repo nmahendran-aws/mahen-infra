@@ -19,7 +19,7 @@ module "ec2_instance" {
   for_each                      = toset(data.aws_subnets.public1.ids)
   subnet_id                     = each.value
   user_data                     = var.user_data
-  key_name                      = nmahendran-kp
+  key_name                      = "nmahendran-kp"
   associate_public_ip_address   = true
   tags = {
     Terraform   = "true"
