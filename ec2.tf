@@ -8,6 +8,32 @@ data "aws_subnets" "public1" {
   }
 }
 
+resource "aws_security_group" "instance-sg" {
+  name   = "web-instance-sg"
+  vpc_id = var.vpc_id
+
+  # HTTP access from VPC
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # outbound internet access
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Terraform   = "true"
+    Environment = "dev"
+    security-group = "public-subnet1"
+  }
+}
+
 module "ec2_instance" {
   source  = "terraform-aws-modules/ec2-instance/aws"
 
@@ -21,9 +47,14 @@ module "ec2_instance" {
   user_data                     = var.user_data
   key_name                      = "nmahendran-kp"
   associate_public_ip_address   = true
+  vpc_security_group_ids = [aws_security_group.nstance-sg.id]
   tags = {
     Terraform   = "true"
     Environment = "dev"
     Subnet = "public-subnet1"
   }
+depends_on = [
+    aws_security_group.instance-sg
+  ]
 }
+
