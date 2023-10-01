@@ -13,12 +13,13 @@ module "ec2_instance" {
 
   name = "mahen-tf-instance"
 
-  instance_type          = "t2.micro"
-  monitoring             = true
-  availability_zone      = "us-east-1a"
-  for_each = toset(data.aws_subnets.public1.ids)
-  subnet_id              = each.value
-  associate_public_ip_address = true
+  instance_type                 = "t2.micro"
+  monitoring                    = true
+  availability_zone             = "us-east-1a"
+  for_each                      = toset(data.aws_subnets.public1.ids)
+  subnet_id                     = each.value
+  user_data                     = var.user_data
+  associate_public_ip_address   = true
   tags = {
     Terraform   = "true"
     Environment = "dev"
