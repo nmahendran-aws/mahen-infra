@@ -8,6 +8,10 @@ data "aws_subnets" "public1" {
   }
 }
 
+data "aws_ssm_parameter" "amzn2_linux" {
+  name = "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+}
+
 resource "aws_security_group" "instance-sg" {
   name   = "web-instance-sg"
   vpc_id = var.vpc_id
@@ -39,7 +43,8 @@ module "ec2_instance" {
 
   name = "mahen-tf-instance"
 
-  instance_type                 = "t2.micro"
+  ami                    = nonsensitive(data.aws_ssm_parameter.amzn2_linux.value)
+  instance_type          = "t2.micro"
   monitoring                    = true
   availability_zone             = "us-east-1a"
   for_each                      = toset(data.aws_subnets.public1.ids)
