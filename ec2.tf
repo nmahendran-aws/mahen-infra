@@ -52,7 +52,7 @@ module "ec2_instance" {
     Environment = "dev"
     Subnet = "public-subnet1"
   }
-  user_data = templatefile("${path.module}/files/deploy_app.sh")
+  user_data = templatefile("${path.module}/files/deploy_app.sh", {})
 depends_on = [
     aws_security_group.instance-sg
   ]
