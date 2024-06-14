@@ -1,14 +1,3 @@
-variable "aws_access_key" {
-  type        = string
-  description = "AWS access key"
-  sensitive   = true
-}
-
-variable "aws_secret_key" {
-  type        = string
-  description = "AWS secret key"
-  sensitive   = true
-}
 
 variable "aws_region" {
   type        = string
@@ -61,7 +50,3 @@ variable "project" {
   description = "Project name for resource tagging"
 }
 
-variable "billing_code" {
-  type        = string
-  description = "Billing code for resource tagging"
-}
