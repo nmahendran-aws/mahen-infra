@@ -1,21 +1,62 @@
-module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
 
-  name = "mahen-tf-vpc"
-  cidr = "10.0.0.0/16"
+resource "aws_vpc" "app" {
+  cidr_block           = var.vpc_cidr_block
+  enable_dns_hostnames = var.enable_dns_hostnames
+  tags                 = local.common_tags
+}
 
-  azs             = ["us-east-1a", "us-east-1b"]
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24"]
-  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24"]
-  private_subnet_names = ["private-subnet1","private-subnet2"]
-  public_subnet_names = ["public-subnet1","public-subnet2"]
+resource "aws_internet_gateway" "app" {
+  vpc_id = aws_vpc.app.id
 
-  enable_nat_gateway = false
-  enable_vpn_gateway = false
-  create_igw = true
+  tags = local.common_tags
+}
 
-  tags = {
-    Terraform = "true"
-    Environment = "dev"
+resource "aws_subnet" "public_subnet1" {
+  cidr_block              = var.vpc_public_subnet1_cidr_block
+  vpc_id                  = aws_vpc.app.id
+  map_public_ip_on_launch = var.map_public_ip_on_launch
+
+  tags = local.common_tags
+}
+
+# ROUTING #
+resource "aws_route_table" "app" {
+  vpc_id = aws_vpc.app.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.app.id
   }
+
+  tags = local.common_tags
+}
+
+resource "aws_route_table_association" "app_public_subnet1" {
+  subnet_id      = aws_subnet.public_subnet1.id
+  route_table_id = aws_route_table.app.id
+}
+
+# SECURITY GROUPS #
+# Nginx security group 
+resource "aws_security_group" "nginx_sg" {
+  name   = "nginx_sg"
+  vpc_id = aws_vpc.app.id
+
+  # HTTP access from anywhere
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # outbound internet access
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = local.common_tags
 }
