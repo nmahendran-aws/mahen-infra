@@ -42,7 +42,7 @@ variable "instance_type" {
 variable "company" {
   type        = string
   description = "Company name for resource tagging"
-  default     = "Globomantics"
+  default     = "Mahen"
 }
 
 variable "project" {
