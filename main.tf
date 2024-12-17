@@ -6,11 +6,11 @@ terraform {
     }
   }
   backend "remote" {
-         organization = "Mahen-AWS"
-         workspaces {
-           name = "mahen-infra"
-         }
-       }
+    organization = "Mahen-AWS"
+    workspaces {
+      name = "mahen-infra"
+    }
+  }
 }
 
 provider "aws" {
@@ -25,6 +25,6 @@ data "aws_ssm_parameter" "amzn2_linux" {
 resource "null_resource" "example" {
   triggers = {
     value = "A example resource that does nothing!"
-    }
   }
+}
 

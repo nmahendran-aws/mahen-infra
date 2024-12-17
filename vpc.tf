@@ -5,21 +5,22 @@ resource "aws_vpc" "app" {
   tags                 = local.common_tags
 }
 
-resource "aws_internet_gateway" "app" {
-  vpc_id = aws_vpc.app.id
+#resource "aws_internet_gateway" "app" {
+  #vpc_id = aws_vpc.app.id
 
-  tags = local.common_tags
-}
+  #tags = local.common_tags
+#}
 
-resource "aws_subnet" "public_subnet1" {
-  cidr_block              = var.vpc_public_subnet1_cidr_block
-  vpc_id                  = aws_vpc.app.id
-  map_public_ip_on_launch = var.map_public_ip_on_launch
+#resource "aws_subnet" "public_subnet1" {
+ # cidr_block              = var.vpc_public_subnet1_cidr_block
+  #vpc_id                  = aws_vpc.app.id
+  #map_public_ip_on_launch = var.map_public_ip_on_launch
 
-  tags = local.common_tags
-}
+  #tags = local.common_tags
+#}
 
 # ROUTING #
+/**
 resource "aws_route_table" "app" {
   vpc_id = aws_vpc.app.id
 
@@ -30,12 +31,12 @@ resource "aws_route_table" "app" {
 
   tags = local.common_tags
 }
-
 resource "aws_route_table_association" "app_public_subnet1" {
   subnet_id      = aws_subnet.public_subnet1.id
   route_table_id = aws_route_table.app.id
 }
 
+**/
 # SECURITY GROUPS #
 # Nginx security group 
 resource "aws_security_group" "nginx_sg" {
